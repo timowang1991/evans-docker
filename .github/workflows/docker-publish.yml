@@ -62,13 +62,13 @@ jobs:
 
       - name: Log into registry
         env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_USERNAME: ${{ secrets.docker.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.docker.DOCKER_PASSWORD }}
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
       - name: Push image
         env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_USERNAME: ${{ secrets.docker.DOCKER_USERNAME }}
         run: |
           IMAGE_ID=$DOCKER_USERNAME/evans
 
