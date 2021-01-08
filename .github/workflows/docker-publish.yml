@@ -61,16 +61,11 @@ jobs:
         run: docker build . --file Dockerfile --tag $IMAGE_NAME --build-arg EVANS_VER=${{ env.EVANS_VER }}
 
       - name: Log into registry
-        env:
-          DOCKER_USERNAME: ${{ secrets.docker.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.docker.DOCKER_PASSWORD }}
-        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Push image
-        env:
-          DOCKER_USERNAME: ${{ secrets.docker.DOCKER_USERNAME }}
         run: |
-          IMAGE_ID=$DOCKER_USERNAME/evans
+          IMAGE_ID=${{ secrets.DOCKER_USERNAME }}/evans
 
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
