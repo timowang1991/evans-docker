@@ -32,10 +32,10 @@ jobs:
       - name: Sets EVANS_VER env
         run: |
           export EVANS_VER=$(curl --silent "https://api.github.com/repos/ktr0731/evans/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
-          echo "::set-env name=EVANS_VER::$EVANS_VER"
+          echo "EVANS_VER=$EVANS_VER" >> $GITHUB_ENV
 
       - name: Run tests
-        run: docker build . --file Dockerfile -e "EVANS_VER=${EVANS_VER}"
+        run: docker build . --file Dockerfile -e "EVANS_VER=${{ env.EVANS_VER }}"
 
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
@@ -55,7 +55,7 @@ jobs:
       - name: Sets EVANS_VER env
         run: |
           export EVANS_VER=$(curl --silent "https://api.github.com/repos/ktr0731/evans/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
-          echo "::set-env name=EVANS_VER::$EVANS_VER"
+          echo "EVANS_VER=$EVANS_VER" >> $GITHUB_ENV
 
       - name: Build image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
