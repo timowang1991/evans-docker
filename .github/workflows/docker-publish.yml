@@ -16,7 +16,6 @@ on:
 env:
   # TODO: Change variable to your image's name.
   IMAGE_NAME: evans
-  EVANS_VER: $(curl --silent "https://api.github.com/repos/ktr0731/evans/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
 
 jobs:
   # Run tests.
@@ -27,9 +26,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Run tests
+      - name: updates apt-get and install curl
+        run: apt-get update && apt-get install -y curl
+
+      - name: Sets EVANS_VER env
         run: |
-          docker build . --file Dockerfile -e "EVANS_VER=${EVANS_VER}"
+          export EVANS_VER=$(curl --silent "https://api.github.com/repos/ktr0731/evans/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+          echo "::set-env name=EVANS_VER::$EVANS_VER"
+
+      - name: Run tests
+        run: docker build . --file Dockerfile -e "EVANS_VER=${EVANS_VER}"
 
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
@@ -42,6 +48,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: updates apt-get and install curl
+        run: apt-get update && apt-get install -y curl
+
+      - name: Sets EVANS_VER env
+        run: |
+          export EVANS_VER=$(curl --silent "https://api.github.com/repos/ktr0731/evans/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+          echo "::set-env name=EVANS_VER::$EVANS_VER"
 
       - name: Build image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
