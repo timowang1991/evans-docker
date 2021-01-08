@@ -1,6 +1,6 @@
 FROM debian:stretch
 
-ENV EVANS_VER $(curl --silent "https://api.github.com/repos/ktr0731/evans/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+ARG EVANS_VER
 
 RUN apt-get update && \
     apt-get install -y wget && \
