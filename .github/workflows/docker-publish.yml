@@ -35,7 +35,7 @@ jobs:
           echo "EVANS_VER=$EVANS_VER" >> $GITHUB_ENV
 
       - name: Run tests
-        run: docker build . --file Dockerfile -e "EVANS_VER=${{ env.EVANS_VER }}"
+        run: docker build . --file Dockerfile --env EVANS_VER=${{ env.EVANS_VER }}
 
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
